@@ -9,7 +9,7 @@ import Helmet from 'react-helmet';
 import DevTools from './components/DevTools';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
-
+import Sidebar from './components/Sidebar/Sidebar'
 // Import Actions
 import { toggleAddPost } from './AppActions';
 import { switchLanguage } from '../../modules/Intl/IntlActions';
@@ -21,7 +21,7 @@ export class App extends Component {
   }
 
   componentDidMount() {
-    this.setState({isMounted: true}); // eslint-disable-line
+    this.setState({ isMounted: true }); // eslint-disable-line
   }
 
   toggleAddPostSection = () => {
@@ -31,11 +31,11 @@ export class App extends Component {
   render() {
     return (
       <div>
-        {this.state.isMounted && !window.devToolsExtension && process.env.NODE_ENV === 'development' && <DevTools />}
-        <div className="container-fluid">
+        {/* {this.state.isMounted && !window.devToolsExtension && process.env.NODE_ENV === 'development' && <DevTools />} */}
+        <div>
           <Helmet
-            title="MERN Starter - Blog App"
-            titleTemplate="%s - Blog App"
+            title="CCXT"
+            titleTemplate="%s - Coin Watch"
             meta={[
               { charset: 'utf-8' },
               {
@@ -53,7 +53,14 @@ export class App extends Component {
             intl={this.props.intl}
             toggleAddPost={this.toggleAddPostSection}
           />
-            {this.props.children}
+          <div className="container-fluid">
+            <div className="row clearfix">
+              <Sidebar />
+              <div className="col-md-11 content">
+                {this.props.children}
+              </div>
+            </div>
+          </div>
           <Footer />
         </div>
       </div>

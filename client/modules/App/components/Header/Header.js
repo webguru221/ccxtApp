@@ -12,31 +12,29 @@ export function Header(props, context) {
 
   return (
     <header className="header">
-      <div className="row clearfix">
-        <div className="col-md-5 col-sm-3 col-xs-12">
-          <h1 className="logo">LOGO <span className="logo yellow"> HERE</span></h1>
-        </div>
-        <div className="col-md-7 col-sm-9 col-xs-12 margin-top">
-          <div className="row clearfix">
-            <div className="col-md-6 col-sm-6 col-xs-12">
-              <form>
-                <div className="input-group">
-                  <input type="text" className="form-control search_box" placeholder="Search currencies" />
-                  <div className="input-group-btn">
-                    <button className="btn btn-default search_button" type="submit">
-                      <i className="fa fa-search light-color" aria-hidden="true"></i>
-                    </button>
+      <div className="container-fluid">
+        <div className="row clearfix">
+          <div className="col-md-6 col-sm-3 col-xs-12">
+            <h1 className="logo">LOGO <span className="logo yellow"> HERE</span></h1>
+          </div>
+          <div className="col-md-6 col-sm-9 col-xs-12 margin-top">
+            <div className="row clearfix">
+              <div className="col-md-6 col-sm-6 col-xs-12">
+                <form>
+                  <div className="input-group">
+                    <input type="text" className="form-control search_box" placeholder="Search currencies" />
+                    <div className="input-group-btn">
+                      <button className="btn btn-default search_button" type="submit">
+                        <i className="fa fa-search light-color" aria-hidden="true"></i>
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </form>
-            </div>
-            <div className="col-md-2 col-sm-3 col-xs-12">
-              <div className="login-button margin-top">
+                </form>
+              </div>
+              <div className="col-md-3 col-sm-3 col-xs-12 text-center">
                 <a className="login-button" href="#">LOGIN</a>
               </div>
-            </div>
-            <div className="col-md-4 col-sm-3 col-xs-12 no">
-              <div className="signup-button margin-top">
+              <div className="col-md-3 col-sm-3 col-xs-12 text-center">
                 <a className="signup-button" href="#">SIGN UP FREE</a>
               </div>
             </div>

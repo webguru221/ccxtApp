@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { Link } from 'react-router';
+
 import currencies_icon from './images/currencies_icon-white.png';
 import exchanges_icon from './images/exchanges_icon.png';
 import watchlist_icon from './images/watchlist_icon.png';
@@ -20,12 +22,12 @@ export class Sidebar extends Component {
             <div className="col-md-1 col-sm-2 col-xs-12 sidebar text-center nopadding">
                 <ul className="sidenav side_menu">
                     <li className="droplink">
-                        <a href="#">
+                        <Link to={`/`}>
                             <span>
                                 <img src={currencies_icon} className="icon_menu" />
                             </span>
                             <p>Currencies</p>
-                        </a>
+                        </Link>
                     </li>
                     <li className="droplink">
                         <a href="#">

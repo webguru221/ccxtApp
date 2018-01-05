@@ -10,6 +10,10 @@
 	line-height: normal;
 	background: #000000;
 }
+
+.content {
+	border-left: 1px solid #181818;
+}
 a:hover {
 	text-decoration: none !important;
 	border: 0 !important;
@@ -54,9 +58,10 @@ a:focus {
 }
 a.login-button {
 	background-color: #ffcc33;
-	padding: 9px 31px;
+	padding: 10px;
 	border-radius: 1px;
 	color: #030303;
+	display: block;
 }
 a.login-button:hover {
 	background-color: #fff;
@@ -64,11 +69,12 @@ a.login-button:hover {
 	border: 1px solid #fff
 }
 a.signup-button {
- background-color: transparent;
-	padding: 8px 31px;
+ 	background-color: transparent;
+	padding: 10px;
 	border-radius: 1px;
 	color: #fff;
 	border: 1px solid #ffffff;
+	display: block;
 }
 a.signup-button:hover {
 	background-color: #ffcc33;
@@ -79,9 +85,8 @@ a.signup-button:hover {
 	margin-top: 6px;
 }
 .sidebar {
-	background-color: #030303;
 	padding: 21px 4px;
-	border-right: 1px solid #181818;
+	/* border-right: 1px solid #181818; */
 }
 ul.sidenav.side_menu {
 	list-style: none;
