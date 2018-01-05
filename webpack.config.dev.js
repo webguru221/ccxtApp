@@ -2,10 +2,12 @@ var webpack = require('webpack');
 var cssnext = require('postcss-cssnext');
 var postcssFocus = require('postcss-focus');
 var postcssReporter = require('postcss-reporter');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   devtool: 'cheap-module-eval-source-map',
 
+  
   entry: {
     app: [
       'eventsource-polyfill',
@@ -18,11 +20,12 @@ module.exports = {
       'react',
       'react-dom',
     ],
+    stylesCustom: './globalStyle/styles.js'
   },
 
   output: {
     path: __dirname,
-    filename: 'app.js',
+    filename: '[name].js',
     publicPath: 'http://0.0.0.0:8000/',
   },
 
@@ -38,8 +41,12 @@ module.exports = {
     loaders: [
       {
         test: /\.css$/,
-        exclude: /node_modules/,
-        loader: 'style-loader!css-loader?localIdentName=[name]__[local]__[hash:base64:5]&modules&importLoaders=1&sourceMap!postcss-loader',
+        exclude: [/node_modules/, /globalStyle/],
+        loader: ['style-loader', 'css-loader?localIdentName=[name]__[local]__[hash:base64:5]&modules&importLoaders=1&sourceMap!postcss-loader'],
+      }, {
+        test: /\.css$/,
+        include: /globalStyle/,
+        loader:  ExtractTextPlugin.extract('style-loader', 'css-loader'),
       }, {
         test: /\.css$/,
         include: /node_modules/,
@@ -49,7 +56,7 @@ module.exports = {
         exclude: [/node_modules/, /.+\.config.js/],
         loader: 'babel',
       }, {
-        test: /\.(jpe?g|gif|png|svg)$/i,
+        test: /\.(jpe?g|gif|png|woff|woff2|eot|ttf|svg|otf)$/i,
         loader: 'url-loader?limit=10000',
       }, {
         test: /\.json$/,
@@ -59,6 +66,7 @@ module.exports = {
   },
 
   plugins: [
+    new ExtractTextPlugin('[name].css', { allChunks: true }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',

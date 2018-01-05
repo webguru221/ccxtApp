@@ -17,7 +17,8 @@ module.exports = {
     vendor: [
       'react',
       'react-dom',
-    ]
+    ],
+    stylesCustom: './globalStyle/styles.js'
   },
 
   output: {
@@ -38,15 +39,19 @@ module.exports = {
     loaders: [
       {
         test: /\.css$/,
-        exclude: /node_modules/,
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?localIdentName=[hash:base64]&modules&importLoaders=1!postcss-loader'),
+        exclude: [/node_modules/, /globalStyle/],
+        loader: ExtractTextPlugin.extract('style-loader', 'css-loader?localIdentName=[name]__[local]__[hash:base64:5]&modules&importLoaders=1&sourceMap!postcss-loader'),
+      }, {
+        test: /\.css$/,
+        include: /globalStyle/,
+        loader: ExtractTextPlugin.extract('style-loader', 'css-loader'),
       }, {
         test: /\.css$/,
         include: /node_modules/,
         loaders: ['style-loader', 'css-loader'],
       }, {
         test: /\.jsx*$/,
-        exclude: /node_modules/,
+        exclude: [/node_modules/, /.+\.config.js/],
         loader: 'babel',
       }, {
         test: /\.(jpe?g|gif|png|svg)$/i,
