@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { Modal } from 'react-bootstrap';
+
 import xme from '../App/images/xme.png';
 import ADA from '../App/images/ADA.png';
 import POWR from '../App/images/POWR.png';
@@ -19,7 +21,19 @@ export class Home extends Component {
     super(props);
 
     this.state = {
+      layoutModal: false,
       keyword: '',
+      activeColumns: {
+        id: { status: true, text: '#' },
+        coin: { status: true, text: 'COIN' },
+        market_cap: { status: true, text: 'Market Cap' },
+        price: { status: true, text: 'Price' },
+        volume: { status: true, text: 'Volume (24h)' },
+        circulating: { status: true, text: 'Circulating' },
+        hour: { status: true, text: '1h' },
+        day: { status: true, text: '24h' },
+        week: { status: true, text: 'Weekly' },
+      },
       markets: [
         {
           id: 1,
@@ -138,28 +152,91 @@ export class Home extends Component {
     }
   }
 
+  modalClose = () => {
+    this.state.layoutModal = false;
+    this.setState(this.state);
+  }
+
+  openLayoutModal = () => {
+    this.state.layoutModal = true;
+    this.setState(this.state);
+  }
+
   handleChange = (event) => {
     this.state[event.target.name] = event.target.value;
     this.setState(this.state);
   }
 
+  handleLayoutChange = (event) => {
+    this.state.activeColumns[event.target.name].status = event.target.checked;
+    this.setState(this.state);
+  }
+
   filteredMarkets = () => {
     let markets = this.state.markets;
-    
+
     if (this.state.keyword != '') {
       let keyword = this.state.keyword.toLowerCase();
       markets = markets.filter(market => {
-        return ( 
+        return (
           market.coin.name.toLowerCase().search(keyword) != -1 ||
           market.coin.symbol.toLowerCase().search(keyword) != -1
-        ); 
+        );
       });
     }
 
     return markets;
   }
 
+  renderMarketColumn = (market) => {
+    const self = this;
+    let tableData = [];
+
+    for (let column in market) {
+      if (self.state.activeColumns[column].status) {
+        if (column == 'coin') {
+          tableData.push(
+            <td key={column}>
+              <div className="row-fluid clearfix">
+                <div className="col-md-4 nopadding">
+                  <img src={market[column].image} className="img-responsive" />
+                </div>
+                <div className="col-md-8 nopadding">
+                  <p>{market[column].name}</p>
+                  <p>{market[column].symbol}</p>
+                </div>
+              </div>
+            </td>
+          );
+        } else {
+          tableData.push(<td key={column}>{market[column]}</td>)
+        }
+      }
+    }
+
+    return tableData;
+  }
+
   render() {
+    const self = this;
+    let layoutCheckBoxes = [], tableHeaders = [];
+
+    for (let column in this.state.activeColumns) {
+      if (column != 'id') {
+        layoutCheckBoxes.push(
+          <div key={column}>
+            <label>
+              <input name={column} type="checkbox" checked={this.state.activeColumns[column].status} onChange={self.handleLayoutChange} />
+              {this.state.activeColumns[column].text}
+            </label>
+          </div>
+        );
+      }
+
+      if (this.state.activeColumns[column].status) {
+        tableHeaders.push(<th key={column}>{this.state.activeColumns[column].text}</th>)
+      }
+    }
 
     return (
       <div>
@@ -167,7 +244,7 @@ export class Home extends Component {
           <div className="filers col-md-12">
             <div className="col-md-2 col-sm-6 col-xs-12">
               <div className="layout-button margin-top">
-                <a className="layout-button" href="#">
+                <a className="layout-button" href="javascript:void(0)" onClick={() => this.openLayoutModal()}>
                   <span>
                     <i className="fa fa-list" aria-hidden="true"></i>
                   </span>&nbsp;Layout</a>
@@ -203,40 +280,14 @@ export class Home extends Component {
               <table className="table table-striped detail_table">
                 <thead className="heading_yellow heading_box">
                   <tr>
-                    <th className="">#</th>
-                    <th>COIN</th>
-                    <th>Market Cap</th>
-                    <th>Price</th>
-                    <th>Volume (24h)</th>
-                    <th>Circulating</th>
-                    <th>1h</th>
-                    <th>24h</th>
-                    <th>Weekly</th>
+                    {tableHeaders}
                   </tr>
                 </thead>
                 <tbody>
                   {this.filteredMarkets().map((market, index) => {
                     return (
                       <tr key={index} className="gry-bg-tr border-gry padding_top text-align">
-                        <td>{market.id}</td>
-                        <td>
-                          <div className="row-fluid clearfix">
-                            <div className="col-md-4 nopadding">
-                              <img src={market.coin.image} className="img-responsive" />
-                            </div>
-                            <div className="col-md-8 nopadding">
-                              <p>{market.coin.name}</p>
-                              <p>{market.coin.symbol}</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td>{market.market_cap}</td>
-                        <td>{market.price}</td>
-                        <td>{market.volume}</td>
-                        <td>{market.circulating}</td>
-                        <td>{market.hour}</td>
-                        <td>{market.day}</td>
-                        <td>{market.week}</td>
+                        {this.renderMarketColumn(market)}
                       </tr>
                     )
                   })}
@@ -386,6 +437,18 @@ export class Home extends Component {
             <div className="clear"></div>
           </div>
         </div>
+
+        <Modal show={this.state.layoutModal} onHide={this.modalClose} dialogClassName="layout_modal">
+          <Modal.Header>
+            <h3>Customise Layout</h3>
+          </Modal.Header>
+          <Modal.Body>
+            <h2>Column Visibility</h2>
+            <div>
+              {layoutCheckBoxes}
+            </div>
+          </Modal.Body>
+        </Modal>
       </div>
     );
   }
