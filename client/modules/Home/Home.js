@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Modal } from 'react-bootstrap';
+import { Modal, DropdownButton, ButtonToolbar, MenuItem } from 'react-bootstrap';
 import Switch from 'react-bootstrap-switch';
 import NumberFormat from 'react-number-format';
 
@@ -23,11 +23,14 @@ export class Home extends Component {
     super(props);
 
     this.state = {
+      filterPropDropdown: [],
+      filterCondDropdown: [],
       layoutModal: false,
       filterModal: false,
       keyword: '',
       marketCapFilterSwitch: false,
       activeFilters: [],
+      filters: [],
       filterableColumns: ['price', 'volume', 'hour', 'day', 'week'],
       activeColumns: {
         id: { status: true, text: '#' },
@@ -156,6 +159,16 @@ export class Home extends Component {
         }
       ]
     }
+
+    this.state.filterableColumns.forEach(column => {
+      this.state.filters.push({
+        column: '',
+        type: 'filter',
+        value: '',
+        condition: '',
+        status: false
+      });
+    })
   }
 
   modalClose = () => {
@@ -203,8 +216,53 @@ export class Home extends Component {
     this.setState(this.state);
   }
 
+  handleFilterCheckBox = (event, filter, index) => {
+    const checked = event.target.checked;
+    this.state.filters[index].status = checked;
+
+    if (checked) {
+      this.state.activeFilters[index] = filter;
+    } else {
+      this.state.activeFilters.splice(index, 1);
+    }
+
+    this.setState(this.state);
+  }
+
+  handleFilterPropChange = (property, index) => {
+    this.state.filterPropDropdown[index] = this.state.activeColumns[property].text;
+    this.state.filters[index].column = property;
+
+    this.setState(this.state);
+  }
+
+  handleFilterConditionChange = (condition, index) => {
+    this.state.filterCondDropdown[index] = condition;
+    this.state.filters[index].condition = condition;
+
+    this.setState(this.state);
+  }
+
+  handleFilterValueChange = (val, index) => {
+    this.state.filters[index].value = val;
+
+    this.setState(this.state);
+  }
+
+  compare = (val1, val2, op) => {
+    switch (op) {
+      case 'At Least':
+        return val1 >= val2;
+        break;
+      case 'At Most':
+        return val1 <= val2;
+        break;
+    }
+  }
+
   filteredMarkets = () => {
-    let markets = this.state.markets;
+    const self = this;
+    let markets = this.state.markets.slice(0);
 
     if (this.state.keyword != '') {
       let keyword = this.state.keyword.toLowerCase();
@@ -224,8 +282,12 @@ export class Home extends Component {
               return b[filter.column] - a[filter.column]
             });
             break;
-
-          default:
+          case 'filter':
+            if (filter.column && filter.condition) {
+              markets = markets.filter(market => {
+                return self.compare(market[filter.column], filter.value, filter.condition)
+              });
+            }
             break;
         }
       });
@@ -249,7 +311,7 @@ export class Home extends Component {
                     <img src={market[column].image} className="img-responsive" />
                   </div>
                   <div className="col-md-8 nopadding">
-                    <p className="pdl-5">{market[column].name} <br/>{market[column].symbol}</p>
+                    <p className="pdl-5">{market[column].name} <br />{market[column].symbol}</p>
                   </div>
                 </div>
               </td>
@@ -546,6 +608,50 @@ export class Home extends Component {
                 value={this.state.marketCapFilterSwitch}
               /> &nbsp; Show top 100 coins by market cap
             </div>
+            {this.state.filters.map((filter, index) => {
+              return (
+                <div key={index} className="row margin-top">
+                  <div className="col-md-1">
+                    <input onChange={(event) => this.handleFilterCheckBox(event, filter, index)} type="checkbox" name="status" checked={filter.status} />
+                  </div>
+                  <div className="col-md-7">
+                    <div className="input-group">
+                      <div className="input-group-btn">
+                        <DropdownButton
+                          onSelect={(property) => this.handleFilterPropChange(property, index)}
+                          title={this.state.filterPropDropdown[index] || 'Property'}
+                          className="btn btn-default"
+                          id="dropdown-size-large"
+                        >
+                          {self.state.filterableColumns.map((column, index) => {
+                            return (
+                              <MenuItem key={index} eventKey={column}>{self.state.activeColumns[column].text}</MenuItem>
+                            );
+                          })}
+                        </DropdownButton>
+                        <DropdownButton
+                          onSelect={(condition) => this.handleFilterConditionChange(condition, index)}
+                          title={this.state.filterCondDropdown[index] || 'Condition'}
+                          className="btn btn-default"
+                          id="dropdown-size-large"
+                        >
+                          <MenuItem eventKey="At Least">At Least</MenuItem>
+                          <MenuItem eventKey="At Most">At Most</MenuItem>
+                        </DropdownButton>
+                      </div>
+                      <input
+                        onChange={(e) => self.handleFilterValueChange(e.target.value, index)}
+                        name="value"
+                        value={filter.value}
+                        type="number"
+                        className="form-control"
+                        placeholder="Value"
+                      />
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </Modal.Body>
           <Modal.Footer>
             <div className="clearfix">
