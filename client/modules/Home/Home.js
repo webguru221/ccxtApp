@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 
 import { Modal } from 'react-bootstrap';
+import Switch from 'react-bootstrap-switch';
+import NumberFormat from 'react-number-format';
 
 import xme from '../App/images/xme.png';
 import ADA from '../App/images/ADA.png';
@@ -22,7 +24,11 @@ export class Home extends Component {
 
     this.state = {
       layoutModal: false,
+      filterModal: false,
       keyword: '',
+      marketCapFilterSwitch: false,
+      activeFilters: [],
+      filterableColumns: ['price', 'volume', 'hour', 'day', 'week'],
       activeColumns: {
         id: { status: true, text: '#' },
         coin: { status: true, text: 'COIN' },
@@ -42,12 +48,12 @@ export class Home extends Component {
             name: 'Bit coin',
             symbol: 'BTC'
           },
-          market_cap: '$292,917,848,069',
-          price: '$17,501.43',
-          volume: '$15,680,320,055',
-          circulating: '16,727,350',
-          hour: '2.86%',
-          day: '16.02%',
+          market_cap: Math.floor((Math.random() * 10000000000) + 1000000000),
+          price: Math.round(((Math.random() * 100000) + 10000) * 100) / 100,
+          volume: Math.floor((Math.random() * 10000000000) + 1000000000),
+          circulating: Math.floor((Math.random() * 1000000000) + 100000000),
+          hour: Math.round(((Math.random() * 99) + 1) * 100) / 100,
+          day: Math.round(((Math.random() * 99) + 10) * 100) / 100,
           week: '#'
         }, {
           id: 2,
@@ -56,12 +62,12 @@ export class Home extends Component {
             name: 'Ethereum',
             symbol: 'ETH'
           },
-          market_cap: '$292,917,848,069',
-          price: '$17,501.43',
-          volume: '$15,680,320,055',
-          circulating: '16,727,350',
-          hour: '2.86%',
-          day: '16.02%',
+          market_cap: Math.floor((Math.random() * 10000000000) + 1000000000),
+          price: Math.round(((Math.random() * 100000) + 10000) * 100) / 100,
+          volume: Math.floor((Math.random() * 10000000000) + 1000000000),
+          circulating: Math.floor((Math.random() * 1000000000) + 100000000),
+          hour: Math.round(((Math.random() * 10) + 1) * 100) / 100,
+          day: Math.round(((Math.random() * 99) + 10) * 100) / 100,
           week: '#'
         }, {
           id: 3,
@@ -70,12 +76,12 @@ export class Home extends Component {
             name: 'Ripple',
             symbol: 'XRP'
           },
-          market_cap: '$292,917,848,069',
-          price: '$17,501.43',
-          volume: '$15,680,320,055',
-          circulating: '16,727,350',
-          hour: '2.86%',
-          day: '16.02%',
+          market_cap: Math.floor((Math.random() * 10000000000) + 1000000000),
+          price: Math.round(((Math.random() * 100000) + 10000) * 100) / 100,
+          volume: Math.floor((Math.random() * 10000000000) + 1000000000),
+          circulating: Math.floor((Math.random() * 1000000000) + 100000000),
+          hour: Math.round(((Math.random() * 10) + 1) * 100) / 100,
+          day: Math.round(((Math.random() * 99) + 10) * 100) / 100,
           week: '#'
         }, {
           id: 4,
@@ -84,12 +90,12 @@ export class Home extends Component {
             name: 'IOTA',
             symbol: 'MIOTA'
           },
-          market_cap: '$292,917,848,069',
-          price: '$17,501.43',
-          volume: '$15,680,320,055',
-          circulating: '16,727,350',
-          hour: '2.86%',
-          day: '16.02%',
+          market_cap: Math.floor((Math.random() * 10000000000) + 1000000000),
+          price: Math.round(((Math.random() * 100000) + 10000) * 100) / 100,
+          volume: Math.floor((Math.random() * 10000000000) + 1000000000),
+          circulating: Math.floor((Math.random() * 1000000000) + 100000000),
+          hour: Math.round(((Math.random() * 10) + 1) * 100) / 100,
+          day: Math.round(((Math.random() * 99) + 10) * 100) / 100,
           week: '#'
         }, {
           id: 5,
@@ -98,12 +104,12 @@ export class Home extends Component {
             name: 'Dash',
             symbol: 'DASH'
           },
-          market_cap: '$292,917,848,069',
-          price: '$17,501.43',
-          volume: '$15,680,320,055',
-          circulating: '16,727,350',
-          hour: '2.86%',
-          day: '16.02%',
+          market_cap: Math.floor((Math.random() * 10000000000) + 1000000000),
+          price: Math.round(((Math.random() * 100000) + 10000) * 100) / 100,
+          volume: Math.floor((Math.random() * 10000000000) + 1000000000),
+          circulating: Math.floor((Math.random() * 1000000000) + 100000000),
+          hour: Math.round(((Math.random() * 10) + 1) * 100) / 100,
+          day: Math.round(((Math.random() * 99) + 10) * 100) / 100,
           week: '#'
         }, {
           id: 6,
@@ -112,12 +118,12 @@ export class Home extends Component {
             name: 'Litecoin',
             symbol: 'LTC'
           },
-          market_cap: '$292,917,848,069',
-          price: '$17,501.43',
-          volume: '$15,680,320,055',
-          circulating: '16,727,350',
-          hour: '2.86%',
-          day: '16.02%',
+          market_cap: Math.floor((Math.random() * 10000000000) + 1000000000),
+          price: Math.round(((Math.random() * 100000) + 10000) * 100) / 100,
+          volume: Math.floor((Math.random() * 10000000000) + 1000000000),
+          circulating: Math.floor((Math.random() * 1000000000) + 100000000),
+          hour: Math.round(((Math.random() * 10) + 1) * 100) / 100,
+          day: Math.round(((Math.random() * 99) + 10) * 100) / 100,
           week: '#'
         }, {
           id: 7,
@@ -126,12 +132,12 @@ export class Home extends Component {
             name: 'Monero',
             symbol: 'XMR'
           },
-          market_cap: '$292,917,848,069',
-          price: '$17,501.43',
-          volume: '$15,680,320,055',
-          circulating: '16,727,350',
-          hour: '2.86%',
-          day: '16.02%',
+          market_cap: Math.floor((Math.random() * 10000000000) + 1000000000),
+          price: Math.round(((Math.random() * 100000) + 10000) * 100) / 100,
+          volume: Math.floor((Math.random() * 10000000000) + 1000000000),
+          circulating: Math.floor((Math.random() * 1000000000) + 100000000),
+          hour: Math.round(((Math.random() * 10) + 1) * 100) / 100,
+          day: Math.round(((Math.random() * 99) + 10) * 100) / 100,
           week: '#'
         }, {
           id: 8,
@@ -140,12 +146,12 @@ export class Home extends Component {
             name: 'Cardano',
             symbol: 'ADA'
           },
-          market_cap: '$292,917,848,069',
-          price: '$17,501.43',
-          volume: '$15,680,320,055',
-          circulating: '16,727,350',
-          hour: '2.86%',
-          day: '16.02%',
+          market_cap: Math.floor((Math.random() * 10000000000) + 1000000000),
+          price: Math.round(((Math.random() * 100000) + 10000) * 100) / 100,
+          volume: Math.floor((Math.random() * 10000000000) + 1000000000),
+          circulating: Math.floor((Math.random() * 1000000000) + 100000000),
+          hour: Math.round(((Math.random() * 10) + 1) * 100) / 100,
+          day: Math.round(((Math.random() * 99) + 10) * 100) / 100,
           week: '#'
         }
       ]
@@ -154,6 +160,7 @@ export class Home extends Component {
 
   modalClose = () => {
     this.state.layoutModal = false;
+    this.state.filterModal = false;
     this.setState(this.state);
   }
 
@@ -162,13 +169,37 @@ export class Home extends Component {
     this.setState(this.state);
   }
 
+  openFilterModal = () => {
+    this.state.filterModal = true;
+    this.setState(this.state);
+  }
+
   handleChange = (event) => {
     this.state[event.target.name] = event.target.value;
     this.setState(this.state);
   }
 
-  handleLayoutChange = (event) => {
-    this.state.activeColumns[event.target.name].status = event.target.checked;
+  handleSwitch = (elem, state) => {
+    this.state.activeColumns[elem.props.name].status = state;
+    this.setState(this.state);
+  }
+
+  handleMarketCapFilterSwitch = (elem, state) => {
+    if (state) {
+      let filterObj = {
+        column: elem.props.name,
+        type: 'sort',
+        limit: 100
+      };
+
+      this.state.activeFilters.push(filterObj);
+    } else {
+      this.state.activeFilters = this.state.activeFilters.filter(filter => {
+        return filter.column != elem.props.name
+      });
+    }
+
+    this.state.marketCapFilterSwitch = state;
     this.setState(this.state);
   }
 
@@ -185,6 +216,21 @@ export class Home extends Component {
       });
     }
 
+    if (this.state.activeFilters.length > 0) {
+      this.state.activeFilters.forEach(filter => {
+        switch (filter.type) {
+          case 'sort':
+            markets = markets.sort((a, b) => {
+              return b[filter.column] - a[filter.column]
+            });
+            break;
+
+          default:
+            break;
+        }
+      });
+    }
+
     return markets;
   }
 
@@ -194,22 +240,61 @@ export class Home extends Component {
 
     for (let column in market) {
       if (self.state.activeColumns[column].status) {
-        if (column == 'coin') {
-          tableData.push(
-            <td key={column}>
-              <div className="row-fluid clearfix">
-                <div className="col-md-4 nopadding">
-                  <img src={market[column].image} className="img-responsive" />
+        switch (column) {
+          case 'coin':
+            tableData.push(
+              <td key={column}>
+                <div className="row-fluid clearfix">
+                  <div className="col-md-4 nopadding">
+                    <img src={market[column].image} className="img-responsive" />
+                  </div>
+                  <div className="col-md-8 nopadding">
+                    <p className="pdl-5">{market[column].name} <br/>{market[column].symbol}</p>
+                  </div>
                 </div>
-                <div className="col-md-8 nopadding">
-                  <p>{market[column].name}</p>
-                  <p>{market[column].symbol}</p>
-                </div>
-              </div>
-            </td>
-          );
-        } else {
-          tableData.push(<td key={column}>{market[column]}</td>)
+              </td>
+            );
+            break;
+          case 'market_cap':
+          case 'price':
+          case 'volume':
+            tableData.push(
+              <td key={column}>
+                <NumberFormat
+                  value={market[column]}
+                  displayType={'text'}
+                  thousandSeparator={true}
+                  prefix={'$'}
+                />
+              </td>
+            );
+            break;
+          case 'circulating':
+            tableData.push(
+              <td key={column}>
+                <NumberFormat
+                  value={market[column]}
+                  displayType={'text'}
+                  thousandSeparator={true}
+                />
+              </td>
+            );
+            break;
+          case 'hour':
+          case 'day':
+            tableData.push(
+              <td key={column}>
+                <NumberFormat
+                  value={market[column]}
+                  displayType={'text'}
+                  suffix={'%'}
+                />
+              </td>
+            );
+            break;
+          default:
+            tableData.push(<td key={column}>{market[column]}</td>);
+            break;
         }
       }
     }
@@ -224,11 +309,14 @@ export class Home extends Component {
     for (let column in this.state.activeColumns) {
       if (column != 'id') {
         layoutCheckBoxes.push(
-          <div key={column}>
-            <label>
-              <input name={column} type="checkbox" checked={this.state.activeColumns[column].status} onChange={self.handleLayoutChange} />
-              {this.state.activeColumns[column].text}
-            </label>
+          <div key={column} className="margin-top">
+            <Switch
+              bsSize="small"
+              onChange={self.handleSwitch}
+              name={column}
+              value={self.state.activeColumns[column].status}
+              labelText={self.state.activeColumns[column].text}
+            />
           </div>
         );
       }
@@ -240,43 +328,41 @@ export class Home extends Component {
 
     return (
       <div>
-        <div className="row clearfix">
-          <div className="filers col-md-12">
-            <div className="col-md-2 col-sm-6 col-xs-12">
-              <div className="layout-button margin-top">
+        <div className="row clearfix filers">
+          <div className="col-md-3 col-sm-4 col-xs-12">
+            <div className="row clearfix">
+              <div className="col-md-5 col-xs-12">
                 <a className="layout-button" href="javascript:void(0)" onClick={() => this.openLayoutModal()}>
                   <span>
                     <i className="fa fa-list" aria-hidden="true"></i>
                   </span>&nbsp;Layout</a>
               </div>
-            </div>
-            <div className="col-md-2 col-sm-6 col-xs-12 nopadding">
-              <div className="filters-button margin-top">
-                <a className="filters-button" href="#">
+              <div className="col-md-5 col-xs-12">
+                <a className="filters-button" href="javascript:void(0)" onClick={() => this.openFilterModal()}>
                   <span>
                     <i className="fa fa-filter" aria-hidden="true"></i>
-                  </span> &nbsp; 0 Filters</a>
+                  </span> &nbsp; {this.state.activeFilters.length} Filters</a>
               </div>
             </div>
-            <div className="right_fillter col-md-6 col-sm-9 col-xs-12 pull-right">
-              <div className="search col-md-7 col-sm-6 col-xs-12 pull-right nopadding">
-                <form>
-                  <div className="input-group">
-                    <input name="keyword" onChange={this.handleChange} value={this.state.keyword} type="text" className="form-control search_box" placeholder="Search" />
-                    <div className="input-group-btn">
-                      <button className="btn btn-default search_button" type="submit">
-                        <i className="fa fa-search light-color" aria-hidden="true"></i>
-                      </button>
-                    </div>
+          </div>
+          <div className="right_fillter col-md-9 col-sm-8 col-xs-12 pull-right">
+            <div className="search col-md-5 col-sm-5 col-xs-12 pull-right nopadding">
+              <form>
+                <div className="input-group">
+                  <input name="keyword" onChange={this.handleChange} value={this.state.keyword} type="text" className="form-control search_box" placeholder="Search" />
+                  <div className="input-group-btn">
+                    <button className="btn btn-default search_button" type="submit">
+                      <i className="fa fa-search light-color" aria-hidden="true"></i>
+                    </button>
                   </div>
-                </form>
-              </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>
         <div className="row clearfix">
           <div className="col-md-9 col-sm-9 col-xs-12">
-            <div className="col-md-12 col-sm-12 col-xs-12  coin_table table-responsive">
+            <div className="coin_table table-responsive">
               <table className="table table-striped detail_table">
                 <thead className="heading_yellow heading_box">
                   <tr>
@@ -391,7 +477,7 @@ export class Home extends Component {
             <div className="news_fillter">
 
               <div className="news_box newsbox_bg margin_30 nopadding">
-                <div className="news_2 col-md-12 col-sm-12 col-xs-12  border_bottom padding_11">
+                <div className="news_2 clearfix border_bottom padding_11">
                   <div className="col-md-2 col-sm-2 col-xs-12 news_timg right_border padding-left ">
                     <p className="news_timingtext">11 min</p>
                   </div>
@@ -399,10 +485,7 @@ export class Home extends Component {
                     <p className="news_text">Bitcoiners Increasingly Targeted by Police as Prices Yield Large Asset Forfeiture Gains</p>
                   </div>
                 </div>
-                <div className="clear">
-                </div>
-
-                <div className="news_2 col-md-12 col-sm-12 col-xs-12  border_bottom padding_11 ">
+                <div className="news_2 clearfix border_bottom padding_11 ">
                   <div className="col-md-2 col-sm-2 col-xs-12 news_timg right_border padding-left ">
                     <p className="news_timingtext">11 min</p>
                   </div>
@@ -410,9 +493,7 @@ export class Home extends Component {
                     <p className="news_text">Bitcoiners Increasingly Targeted by Police as Prices Yield Large Asset Forfeiture Gains</p>
                   </div>
                 </div>
-                <div className="clear">
-                </div>
-                <div className="news_3 col-md-12 col-sm-12 col-xs-12 border_bottom padding_11 ">
+                <div className="news_3 clearfix border_bottom padding_11 ">
                   <div className="col-md-2 col-sm-2 col-xs-12 news_timg right_border padding-left">
                     <p className="news_timingtext">11 min</p>
                   </div>
@@ -420,9 +501,7 @@ export class Home extends Component {
                     <p className="news_text">Bitcoiners Increasingly Targeted by Police as Prices Yield Large Asset Forfeiture Gains</p>
                   </div>
                 </div>
-                <div className="clear">
-                </div>
-                <div className="news_4 col-md-12 col-sm-12 col-xs-12  border_bottom padding_11">
+                <div className="news_4 clearfix border_bottom padding_11">
                   <div className="col-md-2 col-sm-2 col-xs-12 news_timg right_border padding-left ">
                     <p className="news_timingtext">11 min</p>
                   </div>
@@ -430,29 +509,53 @@ export class Home extends Component {
                     <p className="news_text">Bitcoiners Increasingly Targeted by Police as Prices Yield Large Asset Forfeiture Gains</p>
                   </div>
                 </div>
-                <div className="clear">
-                </div>
               </div>
             </div>
             <div className="clear"></div>
           </div>
         </div>
 
-        <Modal show={this.state.layoutModal} onHide={this.modalClose} dialogClassName="layout_modal">
-          <Modal.Header>
-            <h3>Customise Layout</h3>
+        <Modal show={this.state.layoutModal} onHide={this.modalClose} dialogClassName="filter_modal">
+          <Modal.Header closeButton>
+            <h3>Customize Layout</h3>
           </Modal.Header>
           <Modal.Body>
-            <h2>Column Visibility</h2>
+            <p>Select values you wish to see</p>
             <div>
               {layoutCheckBoxes}
             </div>
           </Modal.Body>
+          <Modal.Footer>
+            <div className="clearfix">
+              <button onClick={this.modalClose} className="btn btn-success pull-right">Done</button>
+            </div>
+          </Modal.Footer>
+        </Modal>
+
+        <Modal show={this.state.filterModal} onHide={this.modalClose} dialogClassName="layout_modal">
+          <Modal.Header closeButton>
+            <h3>Manage Filters</h3>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Only coins matching all filter criteria will be shown</p>
+            <div>
+              <Switch
+                bsSize="normal"
+                onChange={this.handleMarketCapFilterSwitch}
+                name='market_cap'
+                value={this.state.marketCapFilterSwitch}
+              /> &nbsp; Show top 100 coins by market cap
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <div className="clearfix">
+              <button onClick={this.modalClose} className="btn btn-success pull-right">Done</button>
+            </div>
+          </Modal.Footer>
         </Modal>
       </div>
     );
   }
 }
-
 
 export default Home;
